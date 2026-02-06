@@ -1,0 +1,41 @@
+/* ページ全体のコンテナ */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem; /* 上下の余白を多めに取る */
+}
+
+/* メインタイトル */
+.title {
+  font-size: 2.25rem; /* 少し小さめに */
+  font-weight: 700;
+  color: #111; /* 黒に近い色 */
+  margin-bottom: 3rem; /* タイトルとリストの間を大きく空ける */
+  text-align: center; /* 中央揃え */
+}
+
+/* 記事リスト */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 記事リストの各アイテム */
+.listItem {
+  border-bottom: 1px solid #e5e7eb; /* 薄いグレーの区切り線 */
+}
+
+/* 記事へのリンク */
+.link {
+  display: block; /* エリア全体をリンクにする */
+  padding: 1.5rem 0.5rem; /* 上下の余白を確保 */
+  font-size: 1.25rem;
+  color: #374151; /* 少し柔らかい黒 */
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.link:hover {
+  background-color: #f9fafb; /* ホバー時に非常に薄いグレーにする */
+}
