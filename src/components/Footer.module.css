@@ -1,0 +1,87 @@
+.footer {
+  background-color: #1a1a1a; /* ダークグレー */
+  color: #fff;
+  padding: 4rem 2rem 1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.topSection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+.brand {
+  flex: 1;
+  min-width: 250px;
+}
+
+.logo {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: #999;
+  line-height: 1.6;
+}
+
+.linksGrid {
+  display: flex;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.linkColumn h3 {
+  font-size: 1rem;
+  color: #666; /* 見出しは少し暗めに */
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.linkColumn ul li {
+  margin-bottom: 0.8rem;
+}
+
+.linkColumn a {
+  color: #ddd;
+  transition: color 0.2s;
+}
+
+.linkColumn a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.bottomSection {
+  border-top: 1px solid #333;
+  padding-top: 2rem;
+  text-align: center;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .topSection {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  .linksGrid {
+    gap: 2rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .linkColumn {
+    width: 45%; /* スマホなら2列にする */
+  }
+}

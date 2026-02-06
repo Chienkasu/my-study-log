@@ -1,0 +1,29 @@
+:root {
+  --font-base: 'Noto Sans JP', sans-serif;
+  --color-text: #333;
+  --color-bg: #fff;
+  --header-height: 80px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+  /* ヘッダーが浮くので、コンテンツが隠れないよう調整が必要な場合があるが、
+     今回は「背景透明」をやるのであえてpadding-topはしない */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}

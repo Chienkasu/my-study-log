@@ -1,24 +1,28 @@
-import { Noto_Sans_JP } from "next/font/google"; // Google Fontsからインポート
+import { Noto_Sans_JP } from "next/font/google";
+import "./globals.css"; // コメントアウトを外す！
+import Header from "@/components/Header"; // 追加
+import Footer from "@/components/Footer"; // 追加
 
-// フォントの設定
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
-  weight: ["400", "700"], // 通常の太さと太字を読み込む
+  weight: ["400", "700"],
 });
 
-// globals.cssは不要なので削除またはコメントアウト
-// import "./globals.css"; 
-
 export const metadata = {
-  title: "My Study Log",
-  description: "A blog for my study notes.",
+  title: "IUMe - Learning Platform",
+  description: "Personalized learning matching service.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    // <html>タグにフォントを適用
     <html lang="ja" className={notoSansJp.className}>
-      <body>{children}</body>
+      <body>
+        <Header />
+        {/* Headerがfixedなので、トップページの最初の要素には
+            padding-topをつけたり、全画面FV(First View)を配置したりする必要がある */}
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
