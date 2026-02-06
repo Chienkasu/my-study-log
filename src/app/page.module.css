@@ -1,8 +1,23 @@
-/* ページ全体のコンテナ */
+/* 既存のcontainerのpadding-topは削除してOK（Heroの中に余白を持たせるため） */
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 4rem 2rem; /* 上下の余白を多めに取る */
+  padding-top: 0; 
+}
+
+.hero {
+  background-color: #1a202c; /* 濃い紺色 */
+  color: #fff;
+  height: 400px; /* 高さを確保 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4rem;
+  padding-top: 80px; /* ヘッダーの高さ分、中身を下げる */
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
 }
 
 /* メインタイトル */
