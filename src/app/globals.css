@@ -2,7 +2,8 @@
   --font-base: 'Noto Sans JP', sans-serif;
   --color-text: #333;
   --color-bg: #fff;
-  --header-height: 80px;
+  /* ヘッダーの高さを 80px -> 64px にスリム化 */
+  --header-height: 64px;
 }
 
 * {
@@ -15,8 +16,17 @@ body {
   font-family: var(--font-base);
   color: var(--color-text);
   background: var(--color-bg);
-  /* ヘッダーが浮くので、コンテンツが隠れないよう調整が必要な場合があるが、
-     今回は「背景透明」をやるのであえてpadding-topはしない */
+  
+  /* ▼▼▼ 追加: フッターを常に下に配置するための設定 ▼▼▼ */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* layout.jsにある <main> タグが自動的に伸びるようにする */
+main {
+  flex: 1;
+  width: 100%; /* 横幅いっぱい確保 */
 }
 
 a {

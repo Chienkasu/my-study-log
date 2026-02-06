@@ -74,13 +74,13 @@
     flex-direction: column;
     gap: 3rem;
   }
-  
+
   .linksGrid {
     gap: 2rem;
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .linkColumn {
     width: 45%; /* スマホなら2列にする */
   }

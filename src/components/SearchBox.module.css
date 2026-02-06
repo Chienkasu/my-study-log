@@ -1,0 +1,55 @@
+.form {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+
+/* ヘッダーが白くなった時用に色を調整できるクラスがあるとベストだが、
+   一旦シンプルに実装します */
+
+.form:focus-within {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.input {
+  background: transparent;
+  border: none;
+  color: inherit; /* 親の色を引き継ぐ */
+  outline: none;
+  font-size: 0.9rem;
+  width: 120px;
+  transition: width 0.3s;
+}
+
+.input:focus {
+  width: 180px; /* 入力時に少し伸びる */
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+  opacity: 0.8;
+}
+
+.button:hover {
+  opacity: 1;
+}
+
+/* スマホでは非表示にするか、別途デザインが必要 */
+@media (max-width: 768px) {
+  .form {
+    display: none; /* 今回はPCのみに配置します */
+  }
+}

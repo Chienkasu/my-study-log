@@ -1,56 +1,273 @@
-/* 既存のcontainerのpadding-topは削除してOK（Heroの中に余白を持たせるため） */
+/* --- ベースレイアウト --- */
+.mainWrapper {
+  width: 100%;
+}
+
+/* セクションごとの背景色分け */
+.sectionGray {
+  background-color: #f8fafc;
+  padding: 6rem 1rem;
+}
+
+.sectionWhite {
+  background-color: #ffffff;
+  padding: 6rem 1rem;
+}
+
 .container {
-  padding-top: 0; 
+  max-width: 1000px; /* 少し広げる */
+  margin: 0 auto;
 }
 
-.hero {
-  background-color: #1a202c; /* 濃い紺色 */
-  color: #fff;
-  height: 400px; /* 高さを確保 */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 4rem;
-  padding-top: 80px; /* ヘッダーの高さ分、中身を下げる */
-}
-
-.hero h1 {
-  font-size: 3rem;
+/* セクションタイトル */
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
   margin-bottom: 1rem;
+  color: #1e293b;
 }
 
-/* メインタイトル */
-.title {
-  font-size: 2.25rem; /* 少し小さめに */
+.sectionDesc {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 3rem;
+}
+
+/* --- カテゴリカード (Grid) --- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  display: block;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 2rem;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #111; /* 黒に近い色 */
-  margin-bottom: 3rem; /* タイトルとリストの間を大きく空ける */
-  text-align: center; /* 中央揃え */
+  margin-bottom: 0.5rem;
 }
 
-/* 記事リスト */
+.cardArrow {
+  font-size: 1.5rem;
+  color: #94a3b8;
+  float: right;
+}
+
+/* --- Aboutセクション --- */
+.aboutWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  justify-content: space-between;
+}
+
+.aboutText {
+  flex: 1;
+}
+
+.sectionTitleLeft {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+}
+
+.aboutText p {
+  line-height: 1.8;
+  color: #475569;
+  margin-bottom: 2rem;
+}
+
+.textLink {
+  color: #0369a1;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.textLink:hover {
+  border-bottom-color: #0369a1;
+}
+
+/* Aboutの右側の装飾（丸） */
+.aboutDecoration {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.circle {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  border-radius: 50%;
+}
+
+/* --- ヒーローエリア (既存のものを維持しつつ微調整) --- */
+.hero {
+  height: 80vh; 
+  min-height: 500px;
+  background-color: #1e293b; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.heroTitle { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+.heroSubtitle { font-size: 1.25rem; color: #cbd5e1; margin-bottom: 3rem; }
+.heroButtons { display: flex; gap: 1.5rem; justify-content: center; }
+.primaryButton { padding: 0.8rem 2rem; border-radius: 999px; background-color: #fff; color: #1e293b; font-weight: 600; transition: all 0.3s; }
+.primaryButton:hover { background-color: #f1f5f9; transform: translateY(-2px); }
+.secondaryButton { padding: 0.8rem 2rem; border-radius: 999px; border: 1px solid #fff; color: #fff; font-weight: 600; transition: all 0.3s; }
+.secondaryButton:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+/* --- リストアイテム (既存のスタイル調整) --- */
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
+  background: #fff; /* リスト背景を白に */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* 記事リストの各アイテム */
 .listItem {
-  border-bottom: 1px solid #e5e7eb; /* 薄いグレーの区切り線 */
+  border-bottom: 1px solid #f1f5f9;
 }
+.listItem:last-child { border-bottom: none; }
 
-/* 記事へのリンク */
 .link {
-  display: block; /* エリア全体をリンクにする */
-  padding: 1.5rem 0.5rem; /* 上下の余白を確保 */
-  font-size: 1.25rem;
-  color: #374151; /* 少し柔らかい黒 */
+  display: block;
+  padding: 2rem;
   text-decoration: none;
+  color: #333;
   transition: background-color 0.2s;
 }
+.link:hover { background-color: #f8fafc; }
 
-.link:hover {
-  background-color: #f9fafb; /* ホバー時に非常に薄いグレーにする */
+.metaArea { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+.postDate { font-size: 0.875rem; color: #64748b; }
+.categoryBadge { font-size: 0.75rem; background-color: #e0f2fe; color: #0369a1; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 600; }
+.postTitle { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.4; }
+.tagList { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tagBadge { font-size: 0.8rem; color: #64748b; background-color: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px; }
+
+.viewAllButton {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  color: #475569;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.viewAllButton:hover {
+  background-color: #fff;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+  .heroTitle { font-size: 2.5rem; }
+  .aboutWrapper { flex-direction: column; gap: 2rem; text-align: center; }
+  .sectionGray, .sectionWhite { padding: 4rem 1rem; }
+  .circle { width: 150px; height: 150px; margin: 0 auto; }
+}
+
+/* ...既存のCSS... */
+
+/* More Topicsカード専用のデザイン */
+.moreCard {
+  background-color: #1e293b; /* 濃い色にして目立たせる */
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moreCard .cardTitle {
+  color: #fff; /* タイトルを白に */
+}
+
+.moreCard .cardArrow {
+  color: #94a3b8;
+}
+
+.moreCard:hover {
+  background-color: #334155; /* ホバー時は少し明るく */
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+/* ベースレイアウト */
+.mainWrapper {
+  width: 100%;
+  /* 念のためここでも最小高さを意識するが、globals.cssのflex設定が効くので基本OK */
+}
+
+/* セクションごとの背景色分け */
+.sectionGray {
+  background-color: #f8fafc;
+  padding: 6rem 1rem;
+}
+
+.sectionWhite {
+  background-color: #ffffff;
+  padding: 6rem 1rem;
+  /* コンテンツが少なくてもある程度の高さを保つ */
+  min-height: 400px; 
+}
+
+/* ヒーローエリア */
+.hero {
+  background-color: #1a202c;
+  color: #fff;
+  height: 60vh; /* 固定pxではなく画面の60%にする */
+  min-height: 450px; /* ただし小さすぎないように */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1rem;
+  /* ヘッダーが固定なので、その分パディングを取る必要はない（中央配置だから） */
+  /* もし上が詰まって見えるなら padding-top: var(--header-height); を入れる */
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+/* ...（以下のgridやcardなどは前回のままでOK）... */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
 }

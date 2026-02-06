@@ -5,16 +5,20 @@
   width: 100%;
   height: var(--header-height);
   z-index: 1000;
-  transition: background-color 0.3s ease, padding 0.3s ease;
-  color: #fff; /* 初期状態（背景透明）は白文字がかっこいい */
-  /* 文字が見えにくい場合は適宜 text-shadow かグラデーションを敷く */
+  transition: all 0.3s ease; /* 背景だけでなく高さなどもアニメーション */
+  color: #fff;
 }
 
 /* スクロール時のスタイル */
 .scrolled {
-  background-color: rgba(255, 255, 255, 0.95); /* 少し透けた白 */
-  color: #333; /* 文字を黒に */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* 背景を少し濃くし、磨りガラス効果(blur)を入れる */
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px); /* ★ここが重要：背景をぼかす */
+  -webkit-backdrop-filter: blur(10px); /* Safari用 */
+  
+  color: #333;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* 影を柔らかく広げる */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* 薄い線を入れて境界を強調 */
 }
 
 .container {
@@ -24,11 +28,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
+  padding: 0 1.5rem; /* 横の余白も少し調整 */
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.25rem; /* ロゴも少し控えめに */
   font-weight: 700;
   letter-spacing: 0.05em;
 }
@@ -41,12 +45,11 @@
 }
 
 .navLink {
-  font-size: 0.95rem;
+  font-size: 0.9rem; /* 文字サイズ調整 */
   font-weight: 500;
   position: relative;
 }
 
-/* ホバー時のアンダーラインアニメーション */
 .navLink::after {
   content: '';
   position: absolute;
@@ -62,30 +65,13 @@
   width: 100%;
 }
 
-.buttonLink {
-  padding: 0.6rem 1.5rem;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  transition: all 0.3s;
-}
-
-.buttonLink:hover {
-  background-color: currentColor;
-  color: #fff; /* 背景色に応じて反転が必要（複雑になるので一旦簡易化） */
-}
-
-.scrolled .buttonLink:hover {
-  color: #fff;
-  background-color: #333;
-}
-
-/* --- モバイル対応 --- */
+/* --- モバイル対応（変更なし、または微調整） --- */
 .hamburger {
   display: none;
   flex-direction: column;
   justify-content: space-around;
-  width: 30px;
-  height: 24px;
+  width: 24px; /* 少し小さく */
+  height: 20px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -109,7 +95,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateX(100%); /* 右に隠しておく */
+  transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -130,25 +116,17 @@
   font-weight: 700;
 }
 
-/* レスポンシブ切り替え */
 @media (max-width: 768px) {
-  .desktopNav {
-    display: none;
-  }
-  .hamburger {
-    display: flex;
-  }
+  .desktopNav { display: none; }
+  .hamburger { display: flex; }
   
-  /* メニューが開いている時、ハンバーガーボタンを×印にする */
   .menuOpen .bar:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 6px);
-    background-color: #fff; /* 背景黒になるので白に */
+    transform: rotate(45deg) translate(5px, 5px); /* 位置調整 */
+    background-color: #fff;
   }
-  .menuOpen .bar:nth-child(2) {
-    opacity: 0;
-  }
+  .menuOpen .bar:nth-child(2) { opacity: 0; }
   .menuOpen .bar:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -6px);
+    transform: rotate(-45deg) translate(5px, -5px); /* 位置調整 */
     background-color: #fff;
   }
 }

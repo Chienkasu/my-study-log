@@ -1,0 +1,224 @@
+.mainWrapper {
+  width: 100%;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* --- ヒーローエリア --- */
+.hero {
+  background-color: #1a202c;
+  color: #fff;
+  height: 50vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+
+/* --- セクション共通 --- */
+.sectionWhite {
+  background-color: #fff;
+  padding: 6rem 0;
+}
+
+.sectionGray {
+  background-color: #f8fafc;
+  padding: 6rem 0;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+
+.sectionTitleCenter {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 4rem;
+  color: #1e293b;
+  text-align: center;
+}
+
+/* --- プロフィール --- */
+.profileGrid {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.profileText {
+  flex: 1;
+}
+
+.role {
+  font-size: 1.1rem;
+  color: #0369a1;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.bio {
+  line-height: 1.8;
+  color: #475569;
+}
+
+.profileImagePlaceholder {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.circle {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  border-radius: 50%;
+  /* 写真を入れるならここに background-image を設定 */
+}
+
+/* --- スキル --- */
+.skillsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.skillCard {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid #1e293b;
+}
+
+.skillCard h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+}
+
+.skillList {
+  list-style: none;
+  padding: 0;
+}
+
+.skillList li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  color: #475569;
+  font-size: 0.95rem;
+}
+.skillList li:last-child {
+  border-bottom: none;
+}
+
+/* --- タイムライン --- */
+.timeline {
+  border-left: 2px solid #e2e8f0;
+  padding-left: 2rem;
+  margin-left: 1rem;
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.timelineItem::before {
+  content: '';
+  position: absolute;
+  left: -2.6rem;
+  top: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: #fff;
+  border: 3px solid #0369a1;
+  border-radius: 50%;
+}
+
+.year {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0369a1;
+  margin-bottom: 0.5rem;
+}
+
+.timelineContent h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.timelineContent p {
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+/* --- CTA --- */
+.ctaSection {
+  background-color: #1e293b;
+  color: #fff;
+  text-align: center;
+  padding: 5rem 1rem;
+}
+
+.ctaSection h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.ctaSection p {
+  color: #cbd5e1;
+  margin-bottom: 2.5rem;
+}
+
+.button {
+  display: inline-block;
+  background-color: #fff;
+  color: #1e293b;
+  padding: 0.8rem 2.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .profileGrid {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 2rem;
+  }
+  .circle {
+    width: 180px;
+    height: 180px;
+  }
+  .hero {
+    height: 40vh;
+  }
+}

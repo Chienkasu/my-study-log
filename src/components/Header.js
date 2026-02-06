@@ -1,17 +1,17 @@
-"use client"; // フックを使うのでClient Componentにする
+"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./Header.module.css";
+import SearchBox from "./SearchBox"; 
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // スクロール検知
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50); // 50pxスクロールしたら変化
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -24,20 +24,20 @@ export default function Header() {
       }`}
     >
       <div className={styles.container}>
-        {/* ロゴ */}
         <Link href="/" className={styles.logo}>
-          IUMe LOGO
+          大学生の備忘録
         </Link>
 
         {/* デスクトップ用ナビ */}
         <nav className={styles.desktopNav}>
           <Link href="/" className={styles.navLink}>Home</Link>
           <Link href="/about" className={styles.navLink}>About</Link>
-          <Link href="/news" className={styles.navLink}>News</Link>
-          <Link href="/contact" className={styles.buttonLink}>Contact</Link>
+          <Link href="/categories" className={styles.navLink}>Topics</Link>
+          {/* ▼▼▼ ここで使っています ▼▼▼ */}
+          <SearchBox />
         </nav>
 
-        {/* ハンバーガーボタン */}
+        {/* スマホ用ハンバーガーボタン */}
         <button
           className={styles.hamburger}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -49,13 +49,14 @@ export default function Header() {
         </button>
       </div>
 
-      {/* モバイル用メニュー（オーバーレイ） */}
+      {/* モバイル用メニュー */}
       <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ""}`}>
         <nav className={styles.mobileNav}>
           <Link href="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
           <Link href="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
-          <Link href="/news" onClick={() => setIsMenuOpen(false)}>News</Link>
-          <Link href="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+          <Link href="/categories" onClick={() => setIsMenuOpen(false)}>Topics</Link>
+          {/* スマホメニュー内にも検索を置きたい場合はここにも <SearchBox /> を追加できますが、
+              スタイルの調整が必要になるので一旦なしで進めます */}
         </nav>
       </div>
     </header>

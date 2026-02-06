@@ -1,7 +1,7 @@
 import { Noto_Sans_JP } from "next/font/google";
-import "./globals.css"; // コメントアウトを外す！
-import Header from "@/components/Header"; // 追加
-import Footer from "@/components/Footer"; // 追加
+import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -9,8 +9,8 @@ const notoSansJp = Noto_Sans_JP({
 });
 
 export const metadata = {
-  title: "IUMe - Learning Platform",
-  description: "Personalized learning matching service.",
+  title: "大学生の備忘録",
+  description: "大学で学んだことや技術的な知見をアーカイブする学習ログ",
 };
 
 export default function RootLayout({ children }) {
@@ -18,8 +18,6 @@ export default function RootLayout({ children }) {
     <html lang="ja" className={notoSansJp.className}>
       <body>
         <Header />
-        {/* Headerがfixedなので、トップページの最初の要素には
-            padding-topをつけたり、全画面FV(First View)を配置したりする必要がある */}
         <main>{children}</main>
         <Footer />
       </body>
