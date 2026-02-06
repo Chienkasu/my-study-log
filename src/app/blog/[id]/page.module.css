@@ -1,0 +1,47 @@
+/* ページ全体のコンテナ */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/* 記事タイトル */
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 2rem;
+  line-height: 1.4; /* 行間を少し広げる */
+}
+
+/* 記事本文 */
+.content {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.8;    /* 本文の行間は広めにとって読みやすく */
+  color: #374151;
+}
+
+/* 本文の中のh2タグ（小見出し） */
+.content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #d1d5db;
+}
+
+/* 本文の中のpタグ（段落） */
+.content p {
+  margin-bottom: 1.5rem;
+}
+
+/* 本文の中のリンク */
+.content a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.content a:hover {
+  color: #1d4ed8;
+}

@@ -1,20 +1,26 @@
+// 修正案
 import { client } from "@/libs/client";
+import { notFound } from "next/navigation";
 
-// 静的パスを生成
 export async function generateStaticParams() {
-  // 変更点: "blogs" -> "blog"
-  const { contents } = await client.get({ endpoint: "blogs" });
-  const paths = contents.map((item) => ({
+  const { contents } = await client.get({ endpoint: "blogs" }); 
+  return contents.map((item) => ({
     id: item.id,
   }));
-  return paths;
 }
 
 export default async function BlogId({ params }) {
-  // ★ ここ修正！ Next.js 15なら await が必要
-  const { id } = await params; 
+  const { id } = await params;
   
-  const data = await client.get({ endpoint: "blogs", contentId: id });
+  // 記事が見つからない場合のハンドリングを追加
+  const data = await client.get({ 
+    endpoint: "blogs", 
+    contentId: id 
+  }).catch(() => null);
+
+  if (!data) {
+    notFound();
+  }
 
   return (
     <main>
