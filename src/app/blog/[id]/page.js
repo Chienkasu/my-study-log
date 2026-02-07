@@ -1,15 +1,17 @@
 import { client } from "@/libs/client";
 import styles from "./page.module.css";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import * as cheerio from "cheerio";
 import hljs from "highlight.js";
 import "highlight.js/styles/github-dark.css";
-import "katex/dist/katex.min.css"; // CSSはここで読み込んでおく
-
-// ★作成したコンポーネントをインポート
+import "katex/dist/katex.min.css";
 import KatexScript from "@/components/KatexScript";
+import FadeIn from "@/components/FadeIn";
 
-// 静的パスの生成
+// ISRの設定（60秒キャッシュ）
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const { contents } = await client.get({ endpoint: "blogs" });
   return contents.map((item) => ({
@@ -19,9 +21,18 @@ export async function generateStaticParams() {
 
 export default async function BlogId({ params }) {
   const { id } = await params;
-  const data = await client.get({ endpoint: "blogs", contentId: id });
+  
+  // 記事データの取得（エラーハンドリング付き）
+  const data = await client.get({ 
+    endpoint: "blogs", 
+    contentId: id 
+  }).catch(() => null);
 
-  // --- HTML加工処理 ---
+  if (!data) {
+    notFound();
+  }
+
+  // --- HTML加工処理 (サーバーサイド) ---
   const $ = cheerio.load(data.content);
 
   // 1. コードハイライト
@@ -31,13 +42,16 @@ export default async function BlogId({ params }) {
     $(elm).addClass("hljs");
   });
 
-  // 2. 目次生成
+  // 2. 目次生成 & ID付与
   const toc = [];
   $("h1, h2, h3").each((index, elm) => {
     const text = $(elm).text();
     const id = `section-${index}`;
-    const tag = $(elm)[0].tagName;
+    const tag = $(elm)[0].tagName; // "h1", "h2", "h3"
+
+    // 本文のタグにIDを埋め込む（ジャンプ用）
     $(elm).attr("id", id);
+
     toc.push({ id, text, tag });
   });
 
@@ -47,7 +61,7 @@ export default async function BlogId({ params }) {
     <article className={styles.articleWrapper}>
       {/* ヒーローエリア */}
       <header className={styles.hero}>
-        <div className={styles.heroContent}>
+        <FadeIn className={styles.heroContent}>
           <div className={styles.metaTop}>
             <time className={styles.date}>
               {new Date(data.publishedAt).toLocaleDateString()}
@@ -58,7 +72,9 @@ export default async function BlogId({ params }) {
               </Link>
             )}
           </div>
+          
           <h1 className={styles.title}>{data.title}</h1>
+
           {data.tags && data.tags.length > 0 && (
             <div className={styles.tags}>
               {data.tags.map((tag) => (
@@ -68,37 +84,42 @@ export default async function BlogId({ params }) {
               ))}
             </div>
           )}
-        </div>
+        </FadeIn>
       </header>
 
-      {/* レイアウト */}
+      {/* コンテンツレイアウト（目次 + 本文） */}
       <div className={styles.contentLayout}>
-        {/* サイドバー（目次） */}
+        {/* ▼▼▼ サイドバー（目次） ▼▼▼ */}
         <aside className={styles.sidebar}>
           <div className={styles.tocSticky}>
-            <h4 className={styles.tocTitle}>目次</h4>
-            <nav>
-              <ul className={styles.tocList}>
-                {toc.map((item) => (
-                  <li key={item.id} className={`${styles.tocItem} ${styles[item.tag]}`}>
-                    <a href={`#${item.id}`}>{item.text}</a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            <h4 className={styles.tocTitle}>Table of Contents</h4>
+            {toc.length === 0 ? (
+              <p className={styles.noToc}>目次はありません</p>
+            ) : (
+              <nav>
+                <ul className={styles.tocList}>
+                  {toc.map((item) => (
+                    <li key={item.id} className={`${styles.tocItem} ${styles[item.tag]}`}>
+                      <a href={`#${item.id}`}>{item.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
           </div>
         </aside>
 
-        {/* 本文 */}
+        {/* 本文エリア */}
         <div className={styles.mainContent}>
-          <div
-            className={styles.postBody}
-            dangerouslySetInnerHTML={{ __html: processedContent }}
-          />
+          <FadeIn>
+            <div
+              className={styles.postBody}
+              dangerouslySetInnerHTML={{ __html: processedContent }}
+            />
+          </FadeIn>
         </div>
       </div>
 
-      {/* ★ここに配置（これでクライアント側で数式変換が走ります） */}
       <KatexScript />
     </article>
   );
