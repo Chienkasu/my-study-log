@@ -14,8 +14,8 @@ export default function AboutPage() {
         <div className={styles.heroContent}>
           <h1 className={styles.title}>About Me</h1>
           <p className={styles.subtitle}>
-            理学と工学の狭間で、<br />
-            生命の仕組みとデジタルの可能性を探求する。
+            勉強頑張ります。<br />
+            将来見返すための記録です。
           </p>
         </div>
       </section>
@@ -29,9 +29,9 @@ export default function AboutPage() {
               <h2 className={styles.sectionTitle}>Profile</h2>
               <p className={styles.role}>Science Student / Developer</p>
               <p className={styles.bio}>
-                都内の大学で生物化学を専攻している理系大学生。<br />
-                生命現象を分子レベルで解明することに情熱を注ぐ一方、
-                独学で習得したプログラミング技術（Python, Next.js）を活用して
+                都内の大学で生物を専攻している理系大学生です。<br />
+                細胞をいじったりピペットマンを握ったりする一方で、
+                AIとプログラミング技術（Python, Next.js）を活用して
                 Webサービス開発やデータ解析を行っています。<br />
                 新しい技術と科学の知見を組み合わせ、価値あるモノづくりを目指しています。
               </p>
@@ -71,17 +71,6 @@ export default function AboutPage() {
                 <li>Machine Learning</li>
               </ul>
             </div>
-            
-             {/* Other Skills (個人情報になりそうな具体的な部活名などは伏せる) */}
-             <div className={styles.skillCard}>
-              <h3>Others</h3>
-              <ul className={styles.skillList}>
-                <li>Stock Investment</li>
-                <li>Gymnastics</li>
-                <li>English</li>
-                <li>Chinese (Basics)</li>
-              </ul>
-            </div>
           </div>
         </div>
       </section>
@@ -102,7 +91,7 @@ export default function AboutPage() {
               <span className={styles.year}>2025 - Present</span>
               <div className={styles.timelineContent}>
                 <h3>Personal Development</h3>
-                <p>学習支援Webサービスの開発・運営</p>
+                <p>学習支援Webサービスの開発</p>
               </div>
             </div>
              <div className={styles.timelineItem}>
@@ -122,7 +111,7 @@ export default function AboutPage() {
           <h2>Get in Touch</h2>
           <p>お問い合わせはこちらから</p>
           {/* メールアドレスも公開用(info@など)があればそれにする、なければフォームへのリンク等 */}
-          <Link href="mailto:your-email@example.com" className={styles.button}>
+          <Link href="mailto:tintack22@gmail.com" className={styles.button}>
             Contact
           </Link>
         </div>
