@@ -25,7 +25,7 @@ export default async function Home() {
         <FadeIn className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Keep Learning</h1>
           <p className={styles.heroSubtitle}>
-            大学での学び・技術・思考のアーカイブ
+            エレファント象ﾊﾟｵｰﾝ🐘
           </p>
           <div className={styles.heroButtons}>
             <Link href="/about" className={styles.primaryButton}>
@@ -84,9 +84,8 @@ export default async function Home() {
             <FadeIn className={styles.aboutText}>
               <h2 className={styles.sectionTitleLeft}>About This Log</h2>
               <p>
-                生物化学を専攻している大学生の備忘録です。<br />
-                日々の講義で学んだベイズ推定やフーリエ変換などの数学的知識から、
-                趣味で開発しているWebアプリ（Next.js/Python）の技術ログまで、
+                生物を勉強している大学生の備忘録です。<br />
+                日々の講義で学んだ知識から、趣味まで、
                 幅広く記録しています。
               </p>
               <Link href="/about" className={styles.textLink}>
