@@ -1,7 +1,10 @@
+/* src/components/Breadcrumbs.module.css */
 .nav {
   font-size: 0.875rem;
   color: #64748b;
   margin-bottom: 1rem;
+  /* ヘッダーが fixed で浮いているため、その高さ分 + 余白 を確保して下に下げる */
+  margin-top: calc(var(--header-height) + 20px);
 }
 
 .list {

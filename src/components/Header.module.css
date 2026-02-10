@@ -5,20 +5,26 @@
   width: 100%;
   height: var(--header-height);
   z-index: 1000;
-  transition: all 0.3s ease; /* 背景だけでなく高さなどもアニメーション */
-  color: #fff;
+  transition: all 0.3s ease;
+  /* ベースのカラー設定は削除し、以下のクラスで制御する */
 }
 
-/* スクロール時のスタイル */
-.scrolled {
-  /* 背景を少し濃くし、磨りガラス効果(blur)を入れる */
+/* パターンA: 透明背景・白文字（Axelspace風・トップページ初期状態） */
+.transparent {
+  background-color: transparent;
+  color: #fff; /* 文字は白 */
+  border-bottom: 1px solid transparent;
+  backdrop-filter: none;
+}
+
+/* パターンB: 白背景・黒文字（スクロール後 or 下層ページ） */
+.solid {
   background-color: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px); /* ★ここが重要：背景をぼかす */
-  -webkit-backdrop-filter: blur(10px); /* Safari用 */
-  
-  color: #333;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* 影を柔らかく広げる */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* 薄い線を入れて境界を強調 */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #333; /* 文字は黒 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .container {
@@ -28,11 +34,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem; /* 横の余白も少し調整 */
+  padding: 0 1.5rem;
 }
 
 .logo {
-  font-size: 1.25rem; /* ロゴも少し控えめに */
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
@@ -45,7 +51,7 @@
 }
 
 .navLink {
-  font-size: 0.9rem; /* 文字サイズ調整 */
+  font-size: 0.9rem;
   font-weight: 500;
   position: relative;
 }
@@ -57,7 +63,7 @@
   height: 2px;
   bottom: -4px;
   left: 0;
-  background-color: currentColor;
+  background-color: currentColor; /* 親の文字色に追従するので白・黒自動切り替え */
   transition: width 0.3s;
 }
 
@@ -65,12 +71,12 @@
   width: 100%;
 }
 
-/* --- モバイル対応（変更なし、または微調整） --- */
+/* --- モバイル対応 --- */
 .hamburger {
   display: none;
   flex-direction: column;
   justify-content: space-around;
-  width: 24px; /* 少し小さく */
+  width: 24px;
   height: 20px;
   background: transparent;
   border: none;
@@ -81,7 +87,7 @@
 .bar {
   width: 100%;
   height: 2px;
-  background-color: currentColor;
+  background-color: currentColor; /* ここもcurrentColorにしておけば、ヘッダー色に合わせて変わる */
   transition: all 0.3s;
 }
 
@@ -120,13 +126,14 @@
   .desktopNav { display: none; }
   .hamburger { display: flex; }
   
+  /* メニューが開いているときは、ハンバーガーの線を白にする */
   .menuOpen .bar:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px); /* 位置調整 */
-    background-color: #fff;
+    transform: rotate(45deg) translate(5px, 5px);
+    background-color: #fff !important; /* 強制的に白 */
   }
   .menuOpen .bar:nth-child(2) { opacity: 0; }
   .menuOpen .bar:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px); /* 位置調整 */
-    background-color: #fff;
+    transform: rotate(-45deg) translate(5px, -5px);
+    background-color: #fff !important; /* 強制的に白 */
   }
 }

@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./Header.module.css";
 import SearchBox from "./SearchBox"; 
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname(); // 現在のURLパスを取得
+  const isHome = pathname === "/"; // トップページかどうか判定
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,13 +19,16 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  return (
-    <header
-      className={`${styles.header} ${isScrolled ? styles.scrolled : ""} ${
-        isMenuOpen ? styles.menuOpen : ""
-      }`}
-    >
+  const headerClass = (isHome && !isScrolled && !isMenuOpen) 
+    ? styles.transparent 
+    : styles.solid;
+  
+    return (
+      <header
+            className={`${styles.header} ${headerClass} ${
+              isMenuOpen ? styles.menuOpen : ""
+            }`}
+          >
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
           必死勉強の記録😅
