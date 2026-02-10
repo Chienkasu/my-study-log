@@ -7,7 +7,7 @@ export default function Footer() {
       <div className={styles.container}>
         <div className={styles.topSection}>
           <div className={styles.brand}>
-            <h2 className={styles.logo}>大学生の備忘録</h2>
+            <h2 className={styles.logo}>必死勉強の記録😅</h2>
             <p className={styles.description}>
               Learning, Coding, and Archiving.
               <br />
@@ -29,8 +29,7 @@ export default function Footer() {
 
         <div className={styles.bottomSection}>
           <p>
-            &copy; {new Date().getFullYear()} Daigakusei no Bibouroku. All
-            rights reserved.
+            &copy; {new Date().getFullYear()} 必死勉強の記録😅
           </p>
         </div>
       </div>

@@ -25,7 +25,7 @@ export default function Header() {
     >
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
-          大学生の備忘録
+          必死勉強の記録😅
         </Link>
 
         {/* デスクトップ用ナビ */}
