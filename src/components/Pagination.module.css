@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+}
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #334155;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+.item:hover {
+  background: #e2e8f0;
+}
+.active {
+  background: #3b82f6;
+  color: white;
+}
+.active:hover {
+  background: #2563eb;
+}
