@@ -1,15 +1,35 @@
 import { client } from "@/libs/client";
 
 export default async function sitemap() {
-  const baseUrl = 'https://your-domain.com'; // 自分のURLに変更
+  const baseUrl = 'https://your-domain.com'; // ★必ず自分の本番ドメインに変更すること
 
-  // 全記事を取得
-  const { contents } = await client.get({
-    endpoint: 'blogs',
-    queries: { limit: 1000 }, // 記事数が多い場合はページネーションが必要
-  });
+  // microCMSのlimitは最大100なので、ループして全件取得する
+  let allContents = [];
+  let offset = 0;
+  const limit = 100;
 
-  const posts = contents.map((post) => ({
+  while (true) {
+    const data = await client.get({
+      endpoint: 'blogs',
+      queries: {
+        limit: limit,
+        offset: offset,
+        fields: 'id,updatedAt', // 必要なデータだけ取得して軽量化
+      },
+    });
+
+    allContents = [...allContents, ...data.contents];
+
+    // 今回取得した数がlimitより少なければ、もう次のページはないので終了
+    if (data.contents.length < limit) {
+      break;
+    }
+
+    // 次のページの開始位置を設定
+    offset += limit;
+  }
+
+  const posts = allContents.map((post) => ({
     url: `${baseUrl}/blog/${post.id}`,
     lastModified: new Date(post.updatedAt),
   }));
