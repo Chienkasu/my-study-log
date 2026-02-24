@@ -1,15 +1,16 @@
 import { client } from "@/libs/client";
+import type { Blog } from "@/types/microcms";
 
-export default async function sitemap() {
-  const baseUrl = 'https://your-domain.com'; // ★必ず自分の本番ドメインに変更すること
+export default async function sitemap(): Promise<Array<{ url: string; lastModified: Date }>> {
+  const baseUrl = 'https://my-study-log-gamma.vercel.app/'; // ★必ず自分の本番ドメインに変更すること
 
   // microCMSのlimitは最大100なので、ループして全件取得する
-  let allContents = [];
+  let allContents: Blog[] = [];
   let offset = 0;
   const limit = 100;
 
   while (true) {
-    const data = await client.get({
+    const data = await client.getList<Blog>({
       endpoint: 'blogs',
       queries: {
         limit: limit,
@@ -29,7 +30,7 @@ export default async function sitemap() {
     offset += limit;
   }
 
-  const posts = allContents.map((post) => ({
+  const posts = allContents.map((post: Blog) => ({
     url: `${baseUrl}/blog/${post.id}`,
     lastModified: new Date(post.updatedAt),
   }));

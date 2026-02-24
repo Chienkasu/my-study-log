@@ -6,10 +6,10 @@ export const metadata = {
   description: "Profile and Skills.",
 };
 
-export default function AboutPage() {
+export default function AboutPage(): JSX.Element {
   return (
     <div className={styles.mainWrapper}>
-      {/* --- ヒーローエリア --- */}
+      {/* ヒーローエリア --- */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={styles.title}>About Me</h1>
@@ -25,18 +25,16 @@ export default function AboutPage() {
         <div className={styles.container}>
           <div className={styles.profileGrid}>
             <div className={styles.profileText}>
-              {/* 名前を出さずに "Profile" とするか、ニックネームにする */}
               <h2 className={styles.sectionTitle}>Profile</h2>
               <p className={styles.role}>Science Student / Developer</p>
               <p className={styles.bio}>
                 都内の大学で生物を専攻している理系大学生です。<br />
                 細胞をいじったりピペットマンを握ったりする一方で、
-                AIとプログラミング技術（Python, Next.js）を活用して
+                AIとプログラミング技術 (Python, Next.js) を活用して
                 Webサービス開発やデータ解析を行っています。<br />
                 新しい技術と科学の知見を組み合わせ、価値あるモノづくりを目指しています。
               </p>
             </div>
-            {/* 抽象的なグラフィック（個人特定を防ぐため顔写真は避ける） */}
             <div className={styles.profileImagePlaceholder}>
               <div className={styles.circle}></div>
             </div>
@@ -44,11 +42,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* --- スキルセクション（ここは技術的な興味なのでそのままでOK） --- */}
+      {/* スキルセクション */}
       <section className={styles.sectionGray}>
         <div className={styles.container}>
           <h2 className={styles.sectionTitleCenter}>Skills & Interests</h2>
-          
           <div className={styles.skillsGrid}>
             {/* Tech Skills */}
             <div className={styles.skillCard}>
@@ -60,7 +57,6 @@ export default function AboutPage() {
                 <li>TypeScript</li>
               </ul>
             </div>
-
             {/* Academic Skills */}
             <div className={styles.skillCard}>
               <h3>Academic</h3>
@@ -75,7 +71,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* --- 略歴 (Timeline) 具体名を伏せてぼかす --- */}
+      {/* 略歴 (Timeline) */}
       <section className={styles.sectionWhite}>
         <div className={styles.container}>
           <h2 className={styles.sectionTitleCenter}>Background</h2>
@@ -94,11 +90,11 @@ export default function AboutPage() {
                 <p>学習支援Webサービスの開発</p>
               </div>
             </div>
-             <div className={styles.timelineItem}>
+            <div className={styles.timelineItem}>
               <span className={styles.year}>Present</span>
               <div className={styles.timelineContent}>
                 <h3>University Student</h3>
-                <p>理学部 生物学科 在学中</p>
+                <p>理学部生物学科 在学中</p>
               </div>
             </div>
           </div>
@@ -110,7 +106,6 @@ export default function AboutPage() {
         <div className={styles.container}>
           <h2>Get in Touch</h2>
           <p>お問い合わせはこちらから</p>
-          {/* メールアドレスも公開用(info@など)があればそれにする、なければフォームへのリンク等 */}
           <Link href="mailto:tintack22@gmail.com" className={styles.button}>
             Contact
           </Link>

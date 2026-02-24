@@ -1,9 +1,10 @@
-// src/app/api/draft/route.js
 import { draftMode } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { client } from '@/libs/client';
+import { client } from "@/libs/client";
+import type { Blog } from "@/types/microcms";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request) {
+export async function GET(request: NextRequest): Promise<NextResponse | Response> {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
   const id = searchParams.get('id');
@@ -16,7 +17,7 @@ export async function GET(request) {
   }
 
   // 実際にMicroCMSに問い合わせてコンテンツが存在するか確認
-  const post = await client.get({
+  const post = await client.get<Blog>({
     endpoint: 'blogs',
     contentId: id,
     queries: { draftKey },
@@ -30,6 +31,6 @@ export async function GET(request) {
   const draft = await draftMode();
   draft.enable();
 
-  // 該当記事へリダイレクト（draftKeyをクエリに付与）
+  // 該当記事へリダイレクト (draftKeyをクエリに付与)
   redirect(`/blog/${id}?draftKey=${draftKey}`);
 }

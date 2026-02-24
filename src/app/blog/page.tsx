@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { client } from "@/libs/client";
+import type { Blog } from "@/types/microcms";
 import styles from "../page.module.css"; // トップページのCSSを再利用
 import FadeIn from "@/components/FadeIn";
+import BlogCard from "@/components/BlogCard";
 import BlogSort from "@/components/BlogSort";
-import Pagination from "@/components/Pagination"; // 追加
+import Pagination from "@/components/Pagination";
 
 export const metadata = {
   title: "Blog - 大学生の備忘録",
@@ -11,28 +13,28 @@ export const metadata = {
 };
 
 // Next.js 15以降は searchParams を await する必要があります
-export default async function BlogPage({ searchParams }) {
+export default async function BlogPage({ searchParams }: { searchParams: { order?: string; page?: string } }): Promise<JSX.Element> {
   const { order, page } = await searchParams; // pageパラメータを取得
 
   // ページネーション設定
   const currentPage = page ? parseInt(page) : 1;
   const limit = 10; // 1ページあたりの表示件数
-  
-  // ソート順の決定（デフォルトは降順：新しい順）
+
+  // ソート順の決定 (デフォルトは降順 新しい順)
   const sortOrder = order || "-publishedAt";
 
   // 記事データの取得
-  const data = await client.get({
+  const data = await client.getList<Blog>({
     endpoint: "blogs",
     queries: {
       orders: sortOrder,
       limit: limit,
-      offset: (currentPage - 1) * limit, // 何件目から取得するか計算
+      offset: (currentPage - 1) * limit,
     },
   });
 
-  const contents = data.contents;
-  const totalCount = data.totalCount; // 全記事数（ページネーション計算用）
+  const contents: Blog[] = data.contents;
+  const totalCount = data.totalCount; // 全記事数(ページネーション計算用)
 
   return (
     <div className={styles.mainWrapper}>
@@ -52,7 +54,6 @@ export default async function BlogPage({ searchParams }) {
       {/* 記事一覧エリア */}
       <div className={styles.sectionWhite}>
         <div className={styles.container}>
-          
           {/* ソートボタンを配置 */}
           <FadeIn>
             <BlogSort />
@@ -64,40 +65,13 @@ export default async function BlogPage({ searchParams }) {
             </p>
           ) : (
             <>
-              <ul className={styles.list}>
+              <div className={styles.gridList}>
                 {contents.map((blog, index) => (
-                  <FadeIn
-                    tag="li"
-                    key={blog.id}
-                    delay={index * 0.05}
-                    className={styles.listItem}
-                  >
-                    <Link href={`/blog/${blog.id}`} className={styles.link}>
-                      <div className={styles.metaArea}>
-                        <span className={styles.postDate}>
-                          {new Date(blog.publishedAt).toLocaleDateString()}
-                        </span>
-                        {blog.category && (
-                          <span className={styles.categoryBadge}>
-                            {blog.category.name}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className={styles.postTitle}>{blog.title}</h3>
-                      {blog.tags && blog.tags.length > 0 && (
-                        <div className={styles.tagList}>
-                          {blog.tags.map((tag) => (
-                            <span key={tag.id} className={styles.tagBadge}>
-                              #{tag.name}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </Link>
+                  <FadeIn tag="div" key={blog.id} delay={index * 0.05}>
+                    <BlogCard blog={blog} />
                   </FadeIn>
                 ))}
-              </ul>
-
+              </div>
               {/* ページネーションコンポーネント */}
               <FadeIn delay={0.2}>
                 <Pagination totalCount={totalCount} current={currentPage} />

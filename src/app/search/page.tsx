@@ -1,17 +1,20 @@
 import Link from "next/link";
 import { client } from "@/libs/client";
+import type { Blog } from "@/types/microcms";
 import styles from "../page.module.css"; // トップページのCSSを再利用
 
-export default async function SearchPage({ searchParams }) {
-  // URLパラメータ (?q=...) を取得
+export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }): Promise<JSX.Element> {
+  // URLパラメータ (?q=...)を取得
   const { q } = await searchParams; // Next.js 15/16ではawaitが必要
   const query = q || "";
 
   // microCMSで検索 (qパラメータを使用)
-  const { contents } = await client.get({
+  const { contents } = await client.getList<Blog>({
     endpoint: "blogs",
     queries: { q: query },
   });
+
+  const contentsTyped: Blog[] = contents;
 
   return (
     <div className={styles.mainWrapper}>
@@ -23,30 +26,15 @@ export default async function SearchPage({ searchParams }) {
           </h1>
         </div>
       </section>
-
       <div className={styles.container} style={{ padding: "4rem 1rem" }}>
-        {contents.length === 0 ? (
+        {contentsTyped.length === 0 ? (
           <p style={{ textAlign: "center" }}>該当する記事は見つかりませんでした。</p>
         ) : (
-          <ul className={styles.list}>
-            {contents.map((blog) => (
-              <li key={blog.id} className={styles.listItem}>
-                <Link href={`/blog/${blog.id}`} className={styles.link}>
-                  <div className={styles.metaArea}>
-                    <span className={styles.postDate}>
-                      {new Date(blog.publishedAt).toLocaleDateString()}
-                    </span>
-                    {blog.category && (
-                      <span className={styles.categoryBadge}>
-                        {blog.category.name}
-                      </span>
-                    )}
-                  </div>
-                  <h3 className={styles.postTitle}>{blog.title}</h3>
-                </Link>
-              </li>
+          <div className={styles.gridList}>
+            {contentsTyped.map((blog) => (
+              <BlogCard key={blog.id} blog={blog} />
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>

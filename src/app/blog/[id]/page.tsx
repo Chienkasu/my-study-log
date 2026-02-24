@@ -1,4 +1,5 @@
 import { client } from "@/libs/client";
+import type { Blog, Category, Tag } from "@/types/microcms";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,25 +9,25 @@ import "highlight.js/styles/github-dark.css";
 import "katex/dist/katex.min.css";
 import KatexScript from "@/components/KatexScript";
 import FadeIn from "@/components/FadeIn";
-import Breadcrumbs from "@/components/Breadcrumbs"; // 1. 追加
+import Breadcrumbs from "@/components/Breadcrumbs";
 
-// ISRの設定（60秒キャッシュ）
+// ISRの設定 (60秒キャッシュ)
 export const revalidate = 60;
 
 // 静的パス生成
-export async function generateStaticParams() {
-  const { contents } = await client.get({ endpoint: "blogs" });
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  const { contents } = await client.getList<Blog>({ endpoint: "blogs" });
   return contents.map((item) => ({
     id: item.id,
   }));
 }
 
-// 2. 追加: 動的メタデータ生成 (SEO用)
-export async function generateMetadata({ params, searchParams }) {
+// 動的メタデータ生成(SEO用)
+export async function generateMetadata({ params, searchParams }: { params: { id: string }; searchParams: { draftKey?: string } }) {
   const { id } = await params;
-  const { draftKey } = await searchParams; 
-
-  const data = await client.get({
+  const { draftKey } = await searchParams;
+  
+  const data = await client.get<Blog>({
     endpoint: "blogs",
     contentId: id,
     queries: { draftKey },
@@ -34,7 +35,7 @@ export async function generateMetadata({ params, searchParams }) {
 
   if (!data) return { title: "記事が見つかりません" };
 
-  const description = data.content 
+  const description = data.content
     ? data.content.replace(/<[^>]*>?/gm, '').substring(0, 120) + "..."
     : "記事の詳細です";
 
@@ -49,36 +50,36 @@ export async function generateMetadata({ params, searchParams }) {
   };
 }
 
-export default async function BlogId({ params, searchParams }) {
+export default async function BlogId({ params, searchParams }: { params: { id: string }; searchParams: { draftKey?: string } }): Promise<JSX.Element> {
   const { id } = await params;
-  const { draftKey } = await searchParams; // 3. 追加: プレビュー用
+  const { draftKey } = await searchParams;
 
   // 記事データの取得
-  const data = await client.get({ 
-    endpoint: "blogs", 
+  const data = await client.get<Blog>({
+    endpoint: "blogs",
     contentId: id,
-    queries: { draftKey } 
+    queries: { draftKey }
   }).catch(() => null);
 
   if (!data) {
     notFound();
   }
 
-  // 4. 追加: 関連記事の取得
-  let relatedPosts = [];
+  // 関連記事の取得
+  let relatedPosts: Blog[] = [];
   if (data.category) {
-    const relatedData = await client.get({
+    const relatedData = await client.getList<Blog>({
       endpoint: "blogs",
       queries: {
         filters: `category[equals]${data.category.id}[and]id[not_equals]${data.id}`,
         limit: 3,
         orders: "-publishedAt",
-      },
+      }
     });
     relatedPosts = relatedData.contents;
   }
 
-  // --- HTML加工処理 ---
+  // HTML加工処理
   const $ = cheerio.load(data.content);
 
   // コードハイライト
@@ -89,11 +90,11 @@ export default async function BlogId({ params, searchParams }) {
   });
 
   // 目次生成 & ID付与
-  const toc = [];
+  const toc: { id: string; text: string; tag: string }[] = [];
   $("h1, h2, h3").each((index, elm) => {
     const text = $(elm).text();
     const id = `section-${index}`;
-    const tag = $(elm)[0].tagName; 
+    const tag = $(elm)[0].tagName;
     $(elm).attr("id", id);
     toc.push({ id, text, tag });
   });
@@ -102,15 +103,15 @@ export default async function BlogId({ params, searchParams }) {
 
   return (
     <article className={styles.articleWrapper}>
-      {/* 5. 追加: パンくずリスト表示エリア */}
+      {/* パンくずリスト表示エリア */}
       <div className={styles.breadcrumbsContainer}>
-        <Breadcrumbs 
+        <Breadcrumbs
           lists={[
             { name: "Home", path: "/" },
             { name: "Blog", path: "/blog" },
             ...(data.category ? [{ name: data.category.name, path: `/category/${data.category.id}` }] : []),
             { name: data.title, path: `/blog/${data.id}` }
-          ]} 
+          ]}
         />
       </div>
 
@@ -127,9 +128,7 @@ export default async function BlogId({ params, searchParams }) {
               </Link>
             )}
           </div>
-          
           <h1 className={styles.title}>{data.title}</h1>
-
           {data.tags && data.tags.length > 0 && (
             <div className={styles.tags}>
               {data.tags.map((tag) => (
@@ -162,7 +161,7 @@ export default async function BlogId({ params, searchParams }) {
             )}
           </div>
         </aside>
-
+        
         <div className={styles.mainContent}>
           <FadeIn>
             <div
@@ -171,7 +170,7 @@ export default async function BlogId({ params, searchParams }) {
             />
           </FadeIn>
 
-          {/* 6. 追加: 関連記事セクション */}
+          {/* 関連記事セクション */}
           {relatedPosts.length > 0 && (
             <section className={styles.relatedSection}>
               <h3 className={styles.relatedTitle}>Related Posts</h3>
@@ -191,7 +190,6 @@ export default async function BlogId({ params, searchParams }) {
           )}
         </div>
       </div>
-
       <KatexScript />
     </article>
   );

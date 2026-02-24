@@ -1,10 +1,15 @@
-// src/components/Pagination.js
 import Link from 'next/link';
 import styles from './Pagination.module.css'; // CSSは後で定義
 
-export default function Pagination({ totalCount, current = 1, basePath = '/blog' }) {
+interface PaginationProps {
+  totalCount: number;
+  current?: number;
+  basePath?: string;
+}
+
+export default function Pagination({ totalCount, current = 1, basePath = '/blog' }: PaginationProps): JSX.Element | null {
   const PER_PAGE = 10;
-  const range = (start, end) => [...Array(end - start + 1)].map((_, i) => start + i);
+  const range = (start: number, end: number) => [...Array(end - start + 1)].map((_, i) => start + i);
   const totalPages = Math.ceil(totalCount / PER_PAGE);
 
   if (totalPages <= 1) return null;

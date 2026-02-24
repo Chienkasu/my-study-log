@@ -1,21 +1,23 @@
 import Link from "next/link";
 import { client } from "@/libs/client";
+import type { Blog, Category } from "@/types/microcms";
 import styles from "./page.module.css";
-import FadeIn from "@/components/FadeIn"; 
+import FadeIn from "@/components/FadeIn";
+import BlogCard from "@/components/BlogCard";
 
 export const revalidate = 60;
 
-export default async function Home() {
+export default async function Home(): Promise<JSX.Element> {
   // 記事とカテゴリを同時に取得
   const [blogsData, categoriesData] = await Promise.all([
-    client.get({ endpoint: "blogs", queries: { limit: 5 } }), // 最新5件
-    client.get({ endpoint: "categories", queries: { limit: 100 } }), 
+    client.getList<Blog>({ endpoint: "blogs", queries: { limit: 5 } }), // 最新5件
+    client.getList<Category>({ endpoint: "categories", queries: { limit: 100 } }),
   ]);
 
-  const contents = blogsData.contents;
-  const categories = categoriesData.contents;
+  const contents: Blog[] = blogsData.contents;
+  const categories: Category[] = categoriesData.contents;
 
-  // カテゴリ表示ロジック（トップページは3つまで）
+  // カテゴリ表示ロジック (トップページは3つまで)
   const visibleCategories = categories.slice(0, 3);
   const hasMoreCategories = categories.length > 3;
 
@@ -26,7 +28,7 @@ export default async function Home() {
         <FadeIn className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Keep Learning</h1>
           <p className={styles.heroSubtitle}>
-            エレファント象ﾊﾟｵｰﾝ🐘
+            エレファント象パオーン
           </p>
           <div className={styles.heroButtons}>
             <Link href="/about" className={styles.primaryButton}>
@@ -46,7 +48,6 @@ export default async function Home() {
             <h2 className={styles.sectionTitle}>Explore Topics</h2>
             <p className={styles.sectionDesc}>興味のある分野から記事を探す</p>
           </FadeIn>
-          
           <div className={styles.grid}>
             {visibleCategories.map((cat, index) => (
               // index * 0.1 で順番にふわっと表示させる
@@ -59,8 +60,7 @@ export default async function Home() {
                 </Link>
               </FadeIn>
             ))}
-
-            {/* 3つ以上ある場合のみ「More」カードを表示 */}
+            {/* 3つ以上ある場合のみ 「More」 カードを表示 */}
             {hasMoreCategories && (
               <FadeIn delay={0.3}>
                 <Link href="/categories" className={`${styles.card} ${styles.moreCard}`}>
@@ -78,7 +78,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* --- Aboutセクション --- */}
+      {/*--- Aboutセクション ---*/}
       <section id="about" className={styles.sectionWhite}>
         <div className={styles.container}>
           <div className={styles.aboutWrapper}>
@@ -93,7 +93,6 @@ export default async function Home() {
                 プロフィール詳細を見る &rarr;
               </Link>
             </FadeIn>
-            
             <FadeIn className={styles.aboutDecoration} delay={0.2}>
               <div className={styles.circle}></div>
             </FadeIn>
@@ -107,40 +106,17 @@ export default async function Home() {
           <FadeIn>
             <h2 className={styles.sectionTitle}>Latest Updates</h2>
           </FadeIn>
-          
-          <ul className={styles.list}>
+          <div className={styles.gridList}>
             {contents.map((blog, index) => (
-              <FadeIn tag="li" key={blog.id} delay={index * 0.1} className={styles.listItem}>
-                <Link href={`/blog/${blog.id}`} className={styles.link}>
-                  <div className={styles.metaArea}>
-                    <span className={styles.postDate}>
-                      {new Date(blog.publishedAt).toLocaleDateString()}
-                    </span>
-                    {blog.category && (
-                      <span className={styles.categoryBadge}>
-                        {blog.category.name}
-                      </span>
-                    )}
-                  </div>
-                  <h3 className={styles.postTitle}>{blog.title}</h3>
-                  {blog.tags && blog.tags.length > 0 && (
-                    <div className={styles.tagList}>
-                      {blog.tags.map((tag) => (
-                        <span key={tag.id} className={styles.tagBadge}>
-                          #{tag.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </Link>
+              <FadeIn tag="div" key={blog.id} delay={index * 0.1}>
+                <BlogCard blog={blog} />
               </FadeIn>
             ))}
-          </ul>
-          
-          <div style={{textAlign: 'center', marginTop: '2rem'}}>
-             <FadeIn delay={0.2}>
-               <Link href="/blog" className={styles.viewAllButton}>View All Posts</Link>
-             </FadeIn>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <FadeIn delay={0.2}>
+              <Link href="/blog" className={styles.viewAllButton}>View All Posts</Link>
+            </FadeIn>
           </div>
         </div>
       </div>

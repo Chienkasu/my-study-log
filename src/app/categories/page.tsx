@@ -1,17 +1,18 @@
 import Link from "next/link";
 import { client } from "@/libs/client";
-import styles from "../page.module.css"; // トップページのCSSを使い回し！
+import type { Category } from "@/types/microcms";
+import styles from "../page.module.css"; // トップページのCSSを使い回し!
 
 export const metadata = {
   title: "Categories - 大学生の備忘録",
   description: "All topics and categories.",
 };
 
-export default async function CategoriesPage() {
+export default async function CategoriesPage(): Promise<JSX.Element> {
   // ここでは全件取得
-  const { contents: categories } = await client.get({ 
+  const { contents: categories } = await client.getList<Category>({
     endpoint: "categories",
-    queries: { limit: 100 } 
+    queries: { limit: 100 }
   });
 
   return (
@@ -23,7 +24,6 @@ export default async function CategoriesPage() {
           <p className={styles.heroSubtitle}>興味のある分野を探す</p>
         </div>
       </section>
-
       <div className={styles.sectionWhite}>
         <div className={styles.container}>
           {/* グリッドですべて表示 */}
@@ -37,7 +37,6 @@ export default async function CategoriesPage() {
               </Link>
             ))}
           </div>
-          
           <div style={{ textAlign: "center", marginTop: "4rem" }}>
             <Link href="/" className={styles.viewAllButton}>
               &larr; Back to Home

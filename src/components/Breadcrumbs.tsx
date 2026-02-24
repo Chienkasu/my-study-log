@@ -1,9 +1,18 @@
 import Link from 'next/link';
 import styles from './Breadcrumbs.module.css'; // 必要に応じて作成
 
-export default function Breadcrumbs({ lists }) {
-  // lists = [{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }, ...]
-  
+interface BreadcrumbItem {
+  name: string;
+  path: string;
+}
+
+interface BreadcrumbsProps {
+  lists: BreadcrumbItem[];
+}
+
+export default function Breadcrumbs({ lists }: BreadcrumbsProps): JSX.Element {
+  // lists = [{ name: "Home", path: "/"}, { name: "Blog", path: "/blog" }, ...]
+
   // JSON-LD (Google検索用構造化データ)
   const jsonLd = {
     "@context": "https://schema.org",
