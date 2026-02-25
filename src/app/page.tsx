@@ -7,7 +7,7 @@ import BlogCard from "@/components/BlogCard";
 
 export const revalidate = 60;
 
-export default async function Home(): Promise<JSX.Element> {
+export default async function Home(){
   // 記事とカテゴリを同時に取得
   const [blogsData, categoriesData] = await Promise.all([
     client.getList<Blog>({ endpoint: "blogs", queries: { limit: 5 } }), // 最新5件

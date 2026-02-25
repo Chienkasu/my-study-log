@@ -3,7 +3,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./SearchBox.module.css"; // 後で作る
 
-export default function SearchBox(): JSX.Element {
+export default function SearchBox(){
   const [keyword, setKeyword] = useState<string>("");
   const router = useRouter();
 

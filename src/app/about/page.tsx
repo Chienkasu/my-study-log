@@ -6,7 +6,7 @@ export const metadata = {
   description: "Profile and Skills.",
 };
 
-export default function AboutPage(): JSX.Element {
+export default function AboutPage() {
   return (
     <div className={styles.mainWrapper}>
       {/* ヒーローエリア --- */}

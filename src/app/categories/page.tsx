@@ -8,7 +8,7 @@ export const metadata = {
   description: "All topics and categories.",
 };
 
-export default async function CategoriesPage(): Promise<JSX.Element> {
+export default async function CategoriesPage(){
   // ここでは全件取得
   const { contents: categories } = await client.getList<Category>({
     endpoint: "categories",

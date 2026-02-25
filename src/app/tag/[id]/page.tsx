@@ -12,7 +12,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   }));
 }
 
-export default async function TagPage({ params }: { params: { id: string } }): Promise<JSX.Element> {
+export default async function TagPage({ params }: { params: { id: string } }){
   const { id } = await params;
 
   // タグ情報を取得

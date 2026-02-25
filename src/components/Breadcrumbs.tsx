@@ -10,7 +10,7 @@ interface BreadcrumbsProps {
   lists: BreadcrumbItem[];
 }
 
-export default function Breadcrumbs({ lists }: BreadcrumbsProps): JSX.Element {
+export default function Breadcrumbs({ lists }: BreadcrumbsProps){
   // lists = [{ name: "Home", path: "/"}, { name: "Blog", path: "/blog" }, ...]
 
   // JSON-LD (Google検索用構造化データ)

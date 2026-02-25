@@ -12,7 +12,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   }));
 }
 
-export default async function CategoryPage({ params }: { params: { id: string } }): Promise<JSX.Element> {
+export default async function CategoryPage({ params }: { params: { id: string } }){
   const { id } = await params;
 
   // カテゴリ情報を取得(名前を表示するため)

@@ -7,7 +7,7 @@ interface PaginationProps {
   basePath?: string;
 }
 
-export default function Pagination({ totalCount, current = 1, basePath = '/blog' }: PaginationProps): JSX.Element | null {
+export default function Pagination({ totalCount, current = 1, basePath = '/blog' }: PaginationProps) {
   const PER_PAGE = 10;
   const range = (start: number, end: number) => [...Array(end - start + 1)].map((_, i) => start + i);
   const totalPages = Math.ceil(totalCount / PER_PAGE);

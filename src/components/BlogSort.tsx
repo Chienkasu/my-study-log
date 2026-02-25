@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, FormEvent } from "react";
 import styles from "./BlogSort.module.css";
 
-export default function BlogSort(): JSX.Element {
+export default function BlogSort() {
   const router = useRouter();
   const searchParams = useSearchParams();
   // URLパラメータから現在のソート順を取得 (デフォルトは新しい順)

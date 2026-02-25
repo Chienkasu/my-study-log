@@ -6,7 +6,7 @@ type Props = {
   blog: Blog;
 };
 
-export default function BlogCard({ blog }: Props): JSX.Element {
+export default function BlogCard({ blog }: Props){
   return (
     <Link href={`/blog/${blog.id}`} className={styles.card}>
       <div className={styles.cardContent}>

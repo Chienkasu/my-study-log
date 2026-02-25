@@ -9,10 +9,12 @@ interface FadeInProps extends HTMLMotionProps<'div'> {
   tag?: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap; // tagプロパティを追加
 }
 
-export default function FadeIn({ children, delay = 0, className = "", tag = "div", ...rest }: FadeInProps): JSX.Element {
+export default function FadeIn({ children, delay = 0, className = "", tag = "div", ...rest }: FadeInProps) {
+  // tagに応じて動的にframer-motionのコンポーネントを取得する
+  const MotionComponent = motion[tag as keyof typeof motion] as any;
+
   return (
-    <motion.div
-      as={tag as any}
+    <MotionComponent
       {...rest}
       initial={{ opacity: 0, y: 20 }} // 初期状態:透明で少し下にいる
       whileInView={{ opacity: 1, y: 0 }} // 画面に入ったら: 不透明で元の位置に戻る
@@ -21,6 +23,6 @@ export default function FadeIn({ children, delay = 0, className = "", tag = "div
       className={className}
     >
       {children}
-    </motion.div>
+    </MotionComponent>
   );
 }
