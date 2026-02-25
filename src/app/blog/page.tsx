@@ -1,201 +1,85 @@
-import { client } from "@/libs/client";
-import type { Blog, Category, Tag } from "@/types/microcms";
-import styles from "./page.module.css";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import * as cheerio from "cheerio";
-import hljs from "highlight.js";
-import "highlight.js/styles/github-dark.css";
-import "katex/dist/katex.min.css";
-import KatexScript from "@/components/KatexScript";
+import { client } from "@/libs/client";
+import type { Blog } from "@/types/microcms";
+import styles from "../page.module.css"; // トップページのCSSを再利用
 import FadeIn from "@/components/FadeIn";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import { cache } from "react";
+import BlogCard from "@/components/BlogCard";
+import BlogSort from "@/components/BlogSort";
+import Pagination from "@/components/Pagination";
 
-// ISRの設定 (60秒キャッシュ)
-export const revalidate = 60;
+export const metadata = {
+  title: "Blog - 大学生の備忘録",
+  description: "これまでに書いた記事の一覧です。",
+};
 
-// 記事取得をメモ化する関数 (重複フェッチを防ぐ)
-const getBlog = cache(async (id: string, draftKey?: string) => {
-  return await client.get<Blog>({
+// Next.js 15以降は searchParams を await する必要があります
+export default async function BlogPage({ searchParams }: { searchParams: Promise<{ order?: string; page?: string }> }) {
+  const { order, page } = await searchParams; // pageパラメータを取得
+
+  // ページネーション設定
+  const currentPage = page ? parseInt(page) : 1;
+  const limit = 10; // 1ページあたりの表示件数
+
+  // ソート順の決定 (デフォルトは降順 新しい順)
+  const sortOrder = order || "-publishedAt";
+
+  // 記事データの取得
+  const data = await client.getList<Blog>({
     endpoint: "blogs",
-    contentId: id,
-    queries: { draftKey }
-  }).catch(() => null);
-});
-
-// 静的パス生成
-export async function generateStaticParams(): Promise<{ id: string }[]> {
-  const { contents } = await client.getList<Blog>({
-    endpoint: "blogs",
-    queries: { limit: 100 } // デフォルトの10件制限を回避
-  });
-  return contents.map((item) => ({
-    id: item.id,
-  }));
-}
-
-// 動的メタデータ生成(SEO用)
-export async function generateMetadata({ params, searchParams }: { params: { id: string }; searchParams: { draftKey?: string } }) {
-  const { id } = await params;
-  const { draftKey } = await searchParams;
-  
-  const data = await getBlog(id, draftKey);
-
-  if (!data) return { title: "記事が見つかりません" };
-
-  const description = data.content
-    ? data.content.replace(/<[^>]*>?/gm, '').substring(0, 120) + "..."
-    : "記事の詳細です";
-
-  return {
-    title: data.title,
-    description: description,
-    openGraph: {
-      title: data.title,
-      description: description,
-      type: "article",
+    queries: {
+      orders: sortOrder,
+      limit: limit,
+      offset: (currentPage - 1) * limit,
     },
-  };
-}
-
-export default async function BlogId({ params, searchParams }: { params: { id: string }; searchParams: { draftKey?: string } }) {
-  const { id } = await params;
-  const { draftKey } = await searchParams;
-
-  // 記事データの取得 (キャッシュを利用)
-  const data = await getBlog(id, draftKey);
-
-  if (!data) {
-    notFound();
-  }
-
-  // 関連記事の取得
-  let relatedPosts: Blog[] = [];
-  if (data.category) {
-    const relatedData = await client.getList<Blog>({
-      endpoint: "blogs",
-      queries: {
-        filters: `category[equals]${data.category.id}[and]id[not_equals]${data.id}`,
-        limit: 3,
-        orders: "-publishedAt",
-      }
-    });
-    relatedPosts = relatedData.contents;
-  }
-
-  // HTML加工処理
-  const $ = cheerio.load(data.content);
-
-  // コードハイライト
-  $("pre code").each((_, elm) => {
-    const result = hljs.highlightAuto($(elm).text());
-    $(elm).html(result.value);
-    $(elm).addClass("hljs");
   });
 
-  // 目次生成 & ID付与
-  const toc: { id: string; text: string; tag: string }[] = [];
-  $("h1, h2, h3").each((index, elm) => {
-    const text = $(elm).text();
-    const id = `section-${index}`;
-    const tag = $(elm)[0].tagName;
-    $(elm).attr("id", id);
-    toc.push({ id, text, tag });
-  });
-
-  const processedContent = $.html();
+  const contents: Blog[] = data.contents;
+  const totalCount = data.totalCount; // 全記事数(ページネーション計算用)
 
   return (
-    <article className={styles.articleWrapper}>
-      {/* パンくずリスト表示エリア */}
-      <div className={styles.breadcrumbsContainer}>
-        <Breadcrumbs
-          lists={[
-            { name: "Home", path: "/" },
-            { name: "Blog", path: "/blog" },
-            ...(data.category ? [{ name: data.category.name, path: `/category/${data.category.id}` }] : []),
-            { name: data.title, path: `/blog/${data.id}` }
-          ]}
-        />
-      </div>
-
+    <div className={styles.mainWrapper}>
       {/* ヒーローエリア */}
-      <header className={styles.hero}>
-        <FadeIn className={styles.heroContent}>
-          <div className={styles.metaTop}>
-            <time className={styles.date}>
-              {new Date(data.publishedAt).toLocaleDateString()}
-            </time>
-            {data.category && (
-              <Link href={`/category/${data.category.id}`}>
-                <span className={styles.categoryBadge}>{data.category.name}</span>
-              </Link>
-            )}
-          </div>
-          <h1 className={styles.title}>{data.title}</h1>
-          {data.tags && data.tags.length > 0 && (
-            <div className={styles.tags}>
-              {data.tags.map((tag) => (
-                <Link href={`/tag/${tag.id}`} key={tag.id}>
-                  <span className={styles.tag}>#{tag.name}</span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </FadeIn>
-      </header>
+      <section
+        className={styles.hero}
+        style={{ height: "40vh", minHeight: "300px" }}
+      >
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle} style={{ fontSize: "2.5rem" }}>
+            All Posts
+          </h1>
+          <p className={styles.heroSubtitle}>日々の学びのアーカイブ</p>
+        </div>
+      </section>
 
-      {/* コンテンツレイアウト */}
-      <div className={styles.contentLayout}>
-        <aside className={styles.sidebar}>
-          <div className={styles.tocSticky}>
-            <h4 className={styles.tocTitle}>Table of Contents</h4>
-            {toc.length === 0 ? (
-              <p className={styles.noToc}>目次はありません</p>
-            ) : (
-              <nav>
-                <ul className={styles.tocList}>
-                  {toc.map((item) => (
-                    <li key={item.id} className={`${styles.tocItem} ${styles[item.tag]}`}>
-                      <a href={`#${item.id}`}>{item.text}</a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )}
-          </div>
-        </aside>
-        
-        <div className={styles.mainContent}>
+      {/* 記事一覧エリア */}
+      <div className={styles.sectionWhite}>
+        <div className={styles.container}>
+          {/* ソートボタンを配置 */}
           <FadeIn>
-            <div
-              className={styles.postBody}
-              dangerouslySetInnerHTML={{ __html: processedContent }}
-            />
+            <BlogSort />
           </FadeIn>
 
-          {/* 関連記事セクション */}
-          {relatedPosts.length > 0 && (
-            <section className={styles.relatedSection}>
-              <h3 className={styles.relatedTitle}>Related Posts</h3>
-              <div className={styles.relatedGrid}>
-                {relatedPosts.map((post) => (
-                  <Link href={`/blog/${post.id}`} key={post.id} className={styles.relatedCard}>
-                    <div className={styles.relatedContent}>
-                      <span className={styles.relatedDate}>
-                        {new Date(post.publishedAt).toLocaleDateString()}
-                      </span>
-                      <h4 className={styles.relatedPostTitle}>{post.title}</h4>
-                    </div>
-                  </Link>
+          {contents.length === 0 ? (
+            <p style={{ textAlign: "center", color: "#64748b", marginTop: "2rem" }}>
+              記事がまだありません。
+            </p>
+          ) : (
+            <>
+              <div className={styles.gridList}>
+                {contents.map((blog, index) => (
+                  <FadeIn tag="div" key={blog.id} delay={index * 0.05}>
+                    <BlogCard blog={blog} />
+                  </FadeIn>
                 ))}
               </div>
-            </section>
+              {/* ページネーションコンポーネント */}
+              <FadeIn delay={0.2}>
+                <Pagination totalCount={totalCount} current={currentPage} />
+              </FadeIn>
+            </>
           )}
         </div>
       </div>
-      <KatexScript />
-    </article>
+    </div>
   );
 }
