@@ -10,13 +10,26 @@ import "katex/dist/katex.min.css";
 import KatexScript from "@/components/KatexScript";
 import FadeIn from "@/components/FadeIn";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { cache } from "react";
 
 // ISRの設定 (60秒キャッシュ)
 export const revalidate = 60;
 
+// 記事取得をメモ化する関数 (重複フェッチを防ぐ)
+const getBlog = cache(async (id: string, draftKey?: string) => {
+  return await client.get<Blog>({
+    endpoint: "blogs",
+    contentId: id,
+    queries: { draftKey }
+  }).catch(() => null);
+});
+
 // 静的パス生成
 export async function generateStaticParams(): Promise<{ id: string }[]> {
-  const { contents } = await client.getList<Blog>({ endpoint: "blogs" });
+  const { contents } = await client.getList<Blog>({
+    endpoint: "blogs",
+    queries: { limit: 100 } // デフォルトの10件制限を回避
+  });
   return contents.map((item) => ({
     id: item.id,
   }));
@@ -27,11 +40,7 @@ export async function generateMetadata({ params, searchParams }: { params: { id:
   const { id } = await params;
   const { draftKey } = await searchParams;
   
-  const data = await client.get<Blog>({
-    endpoint: "blogs",
-    contentId: id,
-    queries: { draftKey },
-  }).catch(() => null);
+  const data = await getBlog(id, draftKey);
 
   if (!data) return { title: "記事が見つかりません" };
 
@@ -54,12 +63,8 @@ export default async function BlogId({ params, searchParams }: { params: { id: s
   const { id } = await params;
   const { draftKey } = await searchParams;
 
-  // 記事データの取得
-  const data = await client.get<Blog>({
-    endpoint: "blogs",
-    contentId: id,
-    queries: { draftKey }
-  }).catch(() => null);
+  // 記事データの取得 (キャッシュを利用)
+  const data = await getBlog(id, draftKey);
 
   if (!data) {
     notFound();
@@ -152,7 +157,7 @@ export default async function BlogId({ params, searchParams }: { params: { id: s
               <nav>
                 <ul className={styles.tocList}>
                   {toc.map((item) => (
-                    <li key={item.id} className={`${styles.tocItem} ${styles[item.tag]}`}>
+                         <li key={item.id} className={`${styles.tocItem} ${styles[item.tag]}`}>
                       <a href={`#${item.id}`}>{item.text}</a>
                     </li>
                   ))}
