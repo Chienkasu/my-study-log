@@ -4,6 +4,7 @@ import type { Blog, Category } from "@/types/microcms";
 import styles from "./page.module.css";
 import FadeIn from "@/components/FadeIn";
 import BlogCard from "@/components/BlogCard";
+import GameButton from "@/components/GameButton";
 
 export const revalidate = 60;
 
@@ -37,6 +38,7 @@ export default async function Home(){
             <Link href="#latest-posts" className={styles.secondaryButton}>
               Read Blog
             </Link>
+            <GameButton />
           </div>
         </FadeIn>
       </section>
