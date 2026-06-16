@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Nunito:ital,wght@0,400..900;1,400..900&display=swap');
+
 :root {
-  --font-base: 'Noto Sans JP', sans-serif;
-  --color-text: #333;
-  --color-bg: #fff;
+  /* 丸みのあるフォントを指定（英字: Nunito, 日本語: M PLUS Rounded 1c） */
+  --font-base: 'Nunito', 'M PLUS Rounded 1c', sans-serif;
+  --color-text: #15151e; /* アスファルトブラック */
+  --color-bg: #f9f9fa; /* コントラストを出すための白 */
+  --color-f1-red: #e10600; /* レーシングレッド */
+  --color-f1-dark: #15151e;
   /* ヘッダーの高さを 80px -> 64px にスリム化 */
   --header-height: 64px;
 }

@@ -139,7 +139,7 @@
 .breadcrumbsContainer {
   max-width: 800px;
   margin: 0 auto;
-  padding: 1rem 1rem 0;
+  padding: calc(var(--header-height) + 1rem) 1rem 0;
   font-size: 0.875rem;
   color: #64748b;
 }

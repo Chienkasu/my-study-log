@@ -103,6 +103,7 @@
   justify-content: center;
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 999; /* ヘッダー(1000)の直下に配置。ハンバーガー(1001)の下 */
 }
 
 .open {

@@ -48,15 +48,17 @@ export default async function TagPage({ params }: { params: { id: string } }){
           </h1>
         </div>
       </section>
-      <div className={styles.container}>
-        <div className={styles.gridList}>
-          {contents.length === 0 ? (
-            <p style={{ textAlign: "center" }}>記事がまだありません。</p>
-          ) : (
-            contents.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} />
-            ))
-          )}
+      <div className={styles.sectionWhite}>
+        <div className={styles.container}>
+          <div className={styles.gridList}>
+            {contents.length === 0 ? (
+              <p style={{ textAlign: "center" }}>記事がまだありません。</p>
+            ) : (
+              contents.map((blog) => (
+                <BlogCard key={blog.id} blog={blog} />
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>
