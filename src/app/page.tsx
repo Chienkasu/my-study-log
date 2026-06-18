@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import FadeIn from "@/components/FadeIn";
 import BlogCard from "@/components/BlogCard";
 import GameButton from "@/components/GameButton";
+import DragonsResults from "@/components/DragonsResults";
 
 export const revalidate = 60;
 
@@ -39,6 +40,7 @@ export default async function Home(){
               Read Blog
             </Link>
             <GameButton />
+            <DragonsResults />
           </div>
         </FadeIn>
       </section>
