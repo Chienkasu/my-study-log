@@ -6,6 +6,7 @@ import FadeIn from "@/components/FadeIn";
 import BlogCard from "@/components/BlogCard";
 import GameButton from "@/components/GameButton";
 import DragonsResults from "@/components/DragonsResults";
+import DailyRecipe from "@/components/DailyRecipe";
 
 export const revalidate = 60;
 
@@ -41,6 +42,7 @@ export default async function Home(){
             </Link>
             <GameButton />
             <DragonsResults />
+            <DailyRecipe />
           </div>
         </FadeIn>
       </section>
